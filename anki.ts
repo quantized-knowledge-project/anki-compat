@@ -9,11 +9,14 @@ export type AnkiDeck = {
 };
 
 export type NoteModel = {
-	css: string;
-	fieldNames: string[];
-	noteTemplates: Record<string, {
-		front: string,
-		back: string,
-	}>
-	name: string;
+  css: string;
+  fieldNames: string[];
+  noteTemplates: Record<
+    string,
+    {
+      front: string;
+      back: string;
+    }
+  >;
+  name: string;
 };

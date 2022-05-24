@@ -1,3 +1,2 @@
-
-export {AnkiDeck, NoteModel} from './anki'
-export {fromCrowdAnki} from './crowdanki'
+export { AnkiDeck, NoteModel } from "./anki";
+export { fromCrowdAnki } from "./crowdanki";

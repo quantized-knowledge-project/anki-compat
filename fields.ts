@@ -3,9 +3,9 @@ import _ from "lodash";
 import { convertAnkiFuriganaToRuby } from "./japanese";
 
 type FieldOptions = {
-  mainAudio: boolean
-  disableAutoplay: boolean
-}
+  mainAudio: boolean;
+  disableAutoplay: boolean;
+};
 
 const flattenField = (card: string, name: string, value: string, options: Partial<FieldOptions>) => {
   ({ card, name, value } = flattenFieldConditionals(card, name, value));
@@ -39,12 +39,14 @@ const flattenFieldAudio = (card: string, name: string, value: string, options: P
   const radius = (2 * triangleH) / 3;
   const rectS = 2 * radius;
 
-  const {disableAutoplay, mainAudio} = options;
+  const { disableAutoplay, mainAudio } = options;
 
   value = value.replaceAll(
     /\[sound:(.*)\]/g,
     (match, p1) =>
-      `<audio id="audio-${name}" ${mainAudio ? `name="main-audio"` : ""} ${mainAudio && !disableAutoplay ? "autoplay" : ""} src="media/${p1}"></audio>
+      `<audio id="audio-${name}" ${mainAudio ? `name="main-audio"` : ""} ${
+        mainAudio && !disableAutoplay ? "autoplay" : ""
+      } src="media/${p1}"></audio>
       <div class="replay-button">
         <svg style="overflow: visible" onClick=\${e => {const a = document.getElementById('audio-${name}'); a.currentTime = 0; a.play();}} viewBox="0 0 ${
         rectS + 10
@@ -100,8 +102,8 @@ export const toHTMLAudio = (ankiAudio: string) => {
   return `<audio src="${stripAnkiSoundFormat(ankiAudio)}"></audio>`;
 };
 
-type FieldName = string
-type RawFieldValue = string
+type FieldName = string;
+type RawFieldValue = string;
 
 export const fillAnkiTemplate = (
   ankiTemplate: string,
