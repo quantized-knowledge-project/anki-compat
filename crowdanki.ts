@@ -1,15 +1,16 @@
 import _ from "lodash";
 import { fillAnkiTemplate } from "./fields";
 import * as fs from "fs/promises";
+import { AnkiDeck, NoteModel } from "./anki";
 
-export namespace CrowdAnki {
+namespace CrowdAnki {
   export type Deck = {
     __type__: string;
     deck_configurations: DeckConfiguration[];
     desc: string;
     media_files: string[];
     name: string;
-    note_models: NoteModel[];
+    note_models: CrowdAnki.NoteModel[];
     notes: Note[];
   };
 
@@ -35,11 +36,18 @@ export namespace CrowdAnki {
   };
 }
 
-export const ankiRawToDynamic = async (raw: CrowdAnki.Deck): Promise<AnkiDeck> => {
+const collapseCrowdAnkiDeck = async (raw: CrowdAnki.Deck): Promise<AnkiDeck> => {
   const notes = raw.notes.map((n) => {
-    const model = raw.note_models.find((nm) => nm.crowdanki_uuid === n.note_model_uuid)!;
+    const crowdAnkiNoteModel = raw.note_models.find((nm) => nm.crowdanki_uuid === n.note_model_uuid)!;
+
+    const model: NoteModel = {
+      css: crowdAnkiNoteModel.css,
+      fieldNames: crowdAnkiNoteModel.flds.map(s => s.name),
+      name: crowdAnkiNoteModel.name,
+      noteTemplates: _.fromPairs(crowdAnkiNoteModel.tmpls.map(t => ([t.name, {front: t.qfmt, back: t.afmt}])))
+    }
     return {
-      fields: _.fromPairs(model.flds.map((f, i) => [f.name, n.fields[i]])) as Record<FieldName, RawFieldValue>,
+      fields: _.fromPairs(crowdAnkiNoteModel.flds.map((f, i) => [f.name, n.fields[i]])),
       model: () => model,
     };
   });
@@ -83,7 +91,7 @@ export const ankiRawToDynamic = async (raw: CrowdAnki.Deck): Promise<AnkiDeck> =
 
 export const fromCrowdAnki = async (filename: string): Promise<AnkiDeck> => {
   const raw = JSON.parse(await fs.readFile(filename, "utf8")) as CrowdAnki.Deck;
-  const ankiDeck = await ankiRawToDynamic(raw);
+  const ankiDeck = await collapseCrowdAnkiDeck(raw);
   return ankiDeck
 }
 

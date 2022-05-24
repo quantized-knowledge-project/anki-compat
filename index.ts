@@ -1,3 +1,3 @@
-export * from './crowdanki'
-export * from './japanese'
-export * from './fields'
+
+export {AnkiDeck, NoteModel} from './anki'
+export {fromCrowdAnki} from './crowdanki'
