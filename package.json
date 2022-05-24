@@ -1,0 +1,20 @@
+{
+  "name": "@quantized/anki-compat",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "repository": "https://github.com/quantized-knowledge-project/anki-compat",
+  "license": "MIT",
+  "dependencies": {
+    "he": "^1.2.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/he": "^1.1.2",
+    "@types/lodash": "^4.14.176"
+  },
+  "prepublish": "tsc"
+}
